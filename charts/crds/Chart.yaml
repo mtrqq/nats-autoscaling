@@ -1,0 +1,4 @@
+apiVersion: v2
+name: crds
+version: 0.1.0
+description: Helm chart containing CRDs
