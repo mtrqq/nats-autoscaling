@@ -1,0 +1,31 @@
+apiVersion: jetstream.nats.io/v1beta2
+kind: Stream
+metadata:
+  name: events
+  namespace: nats
+spec:
+  name: EVENTS
+  subjects:
+  - events.>
+  replicas: 3
+  retention: interest
+  storage: memory
+  discard: new
+  maxConsumers: -1
+  maxMsgsPerSubject: -1
+  maxMsgs: -1
+  maxMsgSize: -1
+  maxAge: "0"
+  duplicateWindow: 120s
+---
+apiVersion: jetstream.nats.io/v1beta2
+kind: Consumer
+metadata:
+  name: events-processing
+spec:
+  streamName: EVENTS
+  durableName: EVENTS_PROCESSING
+  ackPolicy: explicit
+  ackWait: 60s
+  deliverPolicy: all
+  replayPolicy: instant
