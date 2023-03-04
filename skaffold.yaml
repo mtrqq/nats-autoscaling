@@ -26,15 +26,11 @@ manifests:
 
 deploy:
   kubectl: {}
+  kubeContext: minikube
   helm:
     releases:
       - name: crds
         chartPath: charts/crds
-        upgradeOnChange: true
-        wait: false
-
-      - name: namespaces
-        chartPath: charts/namespaces
         upgradeOnChange: true
         wait: false
 
