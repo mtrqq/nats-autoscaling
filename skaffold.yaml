@@ -32,15 +32,54 @@ deploy:
       - name: crds
         chartPath: charts/crds
         upgradeOnChange: true
-        wait: false
+        wait: true
 
-      - name: keda
-        repo: https://kedacore.github.io/charts
-        remoteChart: keda
-        namespace: keda
-        createNamespace: true
-        version: 2.9.0
+      - name: namespaces
+        chartPath: charts/namespaces
+        upgradeOnChange: true
+        wait: true
+
+      - name: prometheus
+        repo: https://prometheus-community.github.io/helm-charts
+        remoteChart: prometheus
+        namespace: monitoring
+        setValues:
+          global:
+            scrape_interval: 10s
+          server:
+            persistentVolume:
+              enabled: false
+          alertmanager:
+            persistentVolume:
+              enabled: false
+          pushgateway:
+            persistentVolume:
+              enabled: false
         wait: false
+        upgradeOnChange: true
+
+      - name: prometheus-adapter
+        repo: https://prometheus-community.github.io/helm-charts
+        remoteChart: prometheus-adapter
+        namespace: monitoring
+        setValues:
+          prometheus:
+            url: http://prometheus-server.monitoring.svc.cluster.local
+            port: 80
+          logLevel: 10
+          metricsRelistInterval: 30s
+          rules:
+            default: false
+            external:
+              - metricsQuery: max(nats_consumer_num_pending{<<.LabelMatchers>>}) by (consumer_name)
+                name:
+                  as: messages_pending
+                  matches: ""
+                resources:
+                  namespaced: false
+                seriesQuery: nats_consumer_num_pending{}
+        wait: false
+        upgradeOnChange: true
 
       - name: nats
         repo: https://nats-io.github.io/k8s/helm/charts/

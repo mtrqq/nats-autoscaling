@@ -1,0 +1,4 @@
+apiVersion: v2
+name: skaffold-namespaces
+version: 0.1.0
+description: Helm chart containing namespaces required for development

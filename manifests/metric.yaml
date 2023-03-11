@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-metrics
+  namespace: monitoring
+data:
+  config.yaml: |
+    rules:
+    - seriesQuery: '{__name__=~"^nats_consumer_num_pending$"}'
+      resources:
+        overrides:
+          kubernetes_namespace: {resource: "namespace"}
+          kubernetes_pod_name: {resource: "pod"}
+      name:
+        matches: "nats_consumer_num_pending"
+        as: "events_in_queue"
+      metricsQuery: 'max(nats_consumer_num_pending{consumer_name="EVENTS_PROCESSING")'

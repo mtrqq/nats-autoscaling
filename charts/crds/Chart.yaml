@@ -1,4 +1,4 @@
 apiVersion: v2
-name: crds
+name: skaffold-crds
 version: 0.1.0
-description: Helm chart containing CRDs
+description: Helm chart containing CRDs for skaffold
