@@ -31,12 +31,10 @@ deploy:
     releases:
       - name: crds
         chartPath: charts/crds
-        upgradeOnChange: true
         wait: true
 
       - name: namespaces
         chartPath: charts/namespaces
-        upgradeOnChange: true
         wait: true
 
       - name: prometheus
@@ -56,7 +54,6 @@ deploy:
             persistentVolume:
               enabled: false
         wait: false
-        upgradeOnChange: true
 
       - name: prometheus-adapter
         repo: https://prometheus-community.github.io/helm-charts
@@ -79,7 +76,6 @@ deploy:
                   namespaced: false
                 seriesQuery: nats_consumer_num_pending{}
         wait: false
-        upgradeOnChange: true
 
       - name: nats
         repo: https://nats-io.github.io/k8s/helm/charts/
